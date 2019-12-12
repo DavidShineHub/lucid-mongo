@@ -107,7 +107,22 @@ class BaseRelation {
    * @return {Mixed}
    */
   get $primaryKeyValue () {
-    return this.parentInstance[this.primaryKey]
+    let obj = this.parentInstance.$attributes;
+    const key = this.primaryKey.split('.');
+
+    while (key.length > 0) {
+      if (typeof obj !== 'object') {
+        return undefined;
+      }
+
+      obj = obj[key.shift()];
+    }
+
+    if (this.parentInstance.constructor.objectIDs.includes(this.primaryKey)) {
+      return ObjectID(obj);
+    }
+
+    return obj;
   }
 
   /**
