@@ -12,6 +12,7 @@
 const CE = require('../../Exceptions')
 const proxyGet = require('../../../lib/proxyGet')
 const _ = require('lodash')
+const { ObjectID } = require('mongodb')
 
 const methodsList = [
   'increment',
@@ -107,22 +108,22 @@ class BaseRelation {
    * @return {Mixed}
    */
   get $primaryKeyValue () {
-    let obj = this.parentInstance.$attributes;
-    const key = this.primaryKey.split('.');
+    let obj = this.parentInstance.$attributes
+    const key = this.primaryKey.split('.')
 
     while (key.length > 0) {
       if (typeof obj !== 'object') {
         return undefined;
       }
 
-      obj = obj[key.shift()];
+      obj = obj[key.shift()]
     }
 
     if (this.parentInstance.constructor.objectIDs.includes(this.primaryKey)) {
-      return ObjectID(obj);
+      return ObjectID(obj)
     }
 
-    return obj;
+    return obj
   }
 
   /**
